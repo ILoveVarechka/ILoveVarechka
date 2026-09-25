@@ -57,7 +57,7 @@ const hearts = Array.from({ length: 45 }, () => new Heart(true));
 
 /* ========== 2. Счётчик времени вместе ========== */
 // ⚠️ Поменяй дату на вашу 💕
-const START_DATE = new Date('2022-05-15T00:00:00');
+const START_DATE = new Date('2025-05-07T00:00:00');
 
 function updateCounter() {
   const diff = Math.max(0, Date.now() - START_DATE.getTime());
@@ -76,7 +76,7 @@ updateCounter();
 setInterval(updateCounter, 1000);
 
 /* ========== 3. Эффект печатной машинки ========== */
-const TYPE_TEXT = 'Ты — самое тёплое, что случилось со мной. Спасибо, что ты есть. 💕';
+const TYPE_TEXT = 'Ты — самое лучшее, что я мог получииить! Спасибо тебее, что ты есть. кря-кря❤️';
 const typeEl = document.getElementById('typewriter');
 let typeIndex = 0;
 
