@@ -88,23 +88,10 @@ function type() {
 }
 setTimeout(type, 1000);
 
-/* ========== 4. Взрыв сердечек по клику ========== */
+/* ========== 4. Взрыв сердечек по клику ============= */
 document.getElementById('loveBtn').addEventListener('click', (e) => {
-  const emojis = ['💖', '💕', '💗', '❤️', '💘', '💝'];
-  for (let i = 0; i < 28; i++) {
-    const el = document.createElement('span');
-    el.className = 'burst-heart';
-    el.textContent = emojis[(Math.random() * emojis.length) | 0];
-    el.style.left = e.clientX + 'px';
-    el.style.top = e.clientY + 'px';
-    el.style.fontSize = (16 + Math.random() * 26) + 'px';
-    el.style.setProperty('--tx', ((Math.random() - 0.5) * 400) + 'px');
-    el.style.setProperty('--ty', ((Math.random() - 0.5) * 400 - 100) + 'px');
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 1200);
-  }
+  
 });
-
 /* ========== 5. Мини-игра «Поймай сердечки» ========== */
 const gameArea = document.getElementById('gameArea');
 const scoreEl  = document.getElementById('score');
