@@ -56,8 +56,7 @@ const hearts = Array.from({ length: 45 }, () => new Heart(true));
 })();
 
 /* ========== 2. Счётчик времени вместе ========== */
-// ⚠️ Поменяй дату на вашу 💕
-const START_DATE = new Date('2025-05-07T00:00:00');
+const START_DATE = new Date('2025-05-07T15:50:00');
 
 function updateCounter() {
   const diff = Math.max(0, Date.now() - START_DATE.getTime());
@@ -76,7 +75,7 @@ updateCounter();
 setInterval(updateCounter, 1000);
 
 /* ========== 3. Эффект печатной машинки ========== */
-const TYPE_TEXT = 'Ты — самое лучшее, что я мог получииить! Спасибо тебее, что ты есть. кря-кря❤️';
+const TYPE_TEXT = 'Ты — самая у меня лучшаая!! Спасибо, что ты есть <3';
 const typeEl = document.getElementById('typewriter');
 let typeIndex = 0;
 
@@ -151,6 +150,7 @@ function startGame() {
   scoreEl.textContent = '0';
   timerEl.textContent = GAME_TIME;
   resultEl.textContent = '';
+  resultEl.classList.remove('big-result');
   active = true;
   startBtn.style.display = 'none';
 
@@ -173,11 +173,15 @@ function endGame(win) {
   gameArea.querySelectorAll('.falling-heart').forEach(h => h.remove());
 
   startBtn.style.display = 'inline-block';
-  startBtn.textContent = 'Ещё раз 💘';
+  startBtn.textContent = 'Ещё раз';
 
-  resultEl.textContent = win
-    ? '🎉 Ты поймала 10 сердечек! Но моё ты поймала давно 💘'
-    : `Поймано: ${score}. Но моё сердце всё равно твоё 💖`;
+  resultEl.classList.add('big-result');
+
+  if (win) {
+    resultEl.innerHTML = `Поймала <b>${score}</b> сердечек!<br>Но моё ты поймала давно`;
+  } else {
+    resultEl.innerHTML = `Поймано: <b>${score}</b><br>Но моё сердце всё равно твоё`;
+  }
 }
 
 startBtn.addEventListener('click', startGame);
