@@ -88,11 +88,7 @@ function type() {
 }
 setTimeout(type, 1000);
 
-/* ========== 4. Взрыв сердечек по клику ============= */
-document.getElementById('loveBtn').addEventListener('click', (e) => {
-  
-});
-/* ========== 5. Мини-игра «Поймай сердечки» ========== */
+/* ========== 4. Мини-игра «Поймай сердечки» ========== */
 const gameArea = document.getElementById('gameArea');
 const scoreEl  = document.getElementById('score');
 const timerEl  = document.getElementById('timer');
