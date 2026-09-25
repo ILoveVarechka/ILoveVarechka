@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для тебя</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Comfortaa', system-ui, sans-serif;
+    color: #ffe0ec;
+    background: radial-gradient(circle at 20% 0%, #3d1230 0%, #1a0a14 50%, #0d0509 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    color: #ff8fb1;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 71, 126, 0.1);
+    border: 1px solid rgba(255, 143, 177, 0.3);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+  }
+  .back:hover { transform: translateX(-3px); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 90px 24px 80px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .letter {
+    width: 100%;
+    text-align: left;
+  }
+
+  #title {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(40px, 9vw, 72px);
+    background: linear-gradient(135deg, #ffb3c6, #ff477e, #ff8fb1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 32px;
+    filter: drop-shadow(0 0 25px rgba(255, 71, 126, 0.5));
+    text-align: center;
+  }
+
+  #text {
+    font-size: clamp(17px, 4.5vw, 21px);
+    line-height: 1.95;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #ffe0ec;
+    min-height: 200px;
+  }
+
+  #text::after {
+    content: '|';
+    color: #ff477e;
+    margin-left: 3px;
+    font-weight: 300;
+    animation: blink 1s step-end infinite;
+  }
+  #text.done::after { content: ''; }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  #hint {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.35;
+    transition: opacity 0.5s;
+  }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<a href="index.html" class="back">← Назад</a>
+
+<main>
+  <div class="letter">
+    <h1 id="title"></h1>
+    <p id="text"></p>
+    <div id="hint">Нажми в любом месте — покажу текст сразу</div>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   ⚙️ НАСТРОЙКИ — МЕНЯЙ ТОЛЬКО ЗДЕСЬ
+   ============================================================ */
+const CONFIG = {
+  // Заголовок сверху
+  title: 'Для Вареньки',
+
+  // Текст письма. Пустая строка = отступ между абзацами.
+  text: `Мой самый любимый человек на свете.
+
+Здесь ты можешь написать всё, что хочешь — просто открой файл love.html в репозитории и замени этот текст на свой.
+
+Каждая пустая строка превратится в отступ между абзацами. Можно писать сколько угодно — текст сам будет печататься медленно и красиво.
+
+Нажми в любом месте экрана, если не хочешь ждать.`,
+
+  speed: 110,       // скорость печати (мс на символ). Больше = медленнее
+  startDelay: 900,  // пауза перед началом (мс)
+};
+/* ============================================================ */
+
+const titleEl = document.getElementById('title');
+const textEl  = document.getElementById('text');
+const hintEl  = document.getElementById('hint');
+
+let i = 0;
+let text = CONFIG.text;
+let typing = false;
+let timer = null;
+
+function typeChar() {
+  if (i >= text.length) {
+    typing = false;
+    textEl.classList.add('done');
+    hintEl.style.opacity = '0';
+    return;
+  }
+
+  textEl.textContent = text.slice(0, i + 1);
+  const ch = text[i];
+  i++;
+
+  let delay = CONFIG.speed;
+  if (ch === '.' || ch === '!' || ch === '?') delay = CONFIG.speed * 5;
+  else if (ch === ',')   delay = CONFIG.speed * 2.5;
+  else if (ch === '\n')  delay = CONFIG.speed * 3;
+
+  timer = setTimeout(typeChar, delay);
+}
+
+function start() {
+  titleEl.textContent = CONFIG.title;
+  typing = true;
+  typeChar();
+}
+
+// Тап в любом месте — показать всё сразу
+document.body.addEventListener('click', (e) => {
+  if (e.target.classList.contains('back')) return;
+  if (!typing) return;
+
+  clearTimeout(timer);
+  textEl.textContent = text;
+  i = text.length;
+  typing = false;
+  textEl.classList.add('done');
+  hintEl.style.opacity = '0';
+});
+
+setTimeout(start, CONFIG.startDelay);
+
+/* ========== Падающие сердечки на фоне ========== */
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function heartPath(x, y, s) {
+  ctx.beginPath();
+  ctx.moveTo(x, y + s * 0.3);
+  ctx.bezierCurveTo(x, y, x - s, y, x - s, y + s * 0.3);
+  ctx.bezierCurveTo(x - s, y + s * 0.6, x, y + s * 0.9, x, y + s * 1.1);
+  ctx.bezierCurveTo(x, y + s * 0.9, x + s, y + s * 0.6, x + s, y + s * 0.3);
+  ctx.bezierCurveTo(x + s, y, x, y, x, y + s * 0.3);
+  ctx.fill();
+}
+
+const COLORS = ['#ff477e', '#ff6b9d', '#ff8fb1', '#ffa5c3', '#c9184a'];
+
+class Heart {
+  constructor(initial) { this.reset(initial); }
+  reset(initial) {
+    this.x = Math.random() * W;
+    this.y = initial ? Math.random() * H : -40;
+    this.size = 6 + Math.random() * 14;
+    this.speed = 0.3 + Math.random() * 0.9;
+    this.alpha = 0.12 + Math.random() * 0.35;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.005 + Math.random() * 0.02;
+    this.color = COLORS[(Math.random() * COLORS.length) | 0];
+  }
+  update() {
+    this.y += this.speed;
+    this.wobble += this.wobbleSpeed;
+    this.x += Math.sin(this.wobble) * 0.5;
+    if (this.y > H + 40) this.reset(false);
+  }
+  draw() {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    heartPath(this.x, this.y, this.size);
+    ctx.globalAlpha = 1;
+  }
+}
+
+const hearts = Array.from({ length: 40 }, () => new Heart(true));
+(function loop() {
+  ctx.clearRect(0, 0, W, H);
+  hearts.forEach(h => { h.update(); h.draw(); });
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
