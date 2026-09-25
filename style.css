@@ -1,4 +1,10 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
 
 :root {
   --pink: #ff477e;
@@ -124,6 +130,9 @@ h1 {
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(255, 71, 126, 0.4);
   transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .love-btn:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 16px 40px rgba(255, 71, 126, 0.6); }
@@ -151,6 +160,10 @@ h2 {
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(10px);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .game-hud {
@@ -180,6 +193,9 @@ h2 {
   box-shadow: 0 8px 24px rgba(255, 71, 126, 0.4);
   transition: transform 0.2s;
   z-index: 2;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 #startGame:hover { transform: scale(1.05); }
@@ -190,6 +206,9 @@ h2 {
   font-size: 34px;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   animation: fall linear forwards;
   filter: drop-shadow(0 0 8px rgba(255, 71, 126, 0.7));
   transition: transform 0.1s;
@@ -207,6 +226,33 @@ h2 {
   color: var(--pink-light);
 }
 
+/* Большой финальный текст */
+.big-result {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(48px, 12vw, 120px) !important;
+  line-height: 1.1;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffb3c6, #ff477e, #ff8fb1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 30px rgba(255, 71, 126, 0.6));
+  margin-top: 30px !important;
+  min-height: auto !important;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.big-result b {
+  color: #fff;
+  font-size: 1.2em;
+  text-shadow: 0 0 40px rgba(255, 71, 126, 0.9);
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .burst-heart {
   position: fixed;
   pointer-events: none;
@@ -217,4 +263,4 @@ h2 {
 @keyframes burst {
   0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
   100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.3); opacity: 0; }
-                              }
+}
